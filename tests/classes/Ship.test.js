@@ -1,6 +1,6 @@
 import { Ship } from "../../src/classes/Ship";
 
-let ship = new Ship();
+let ship = new Ship(5);
 
 // OBJECT CONSTRUCTOR
 
@@ -23,4 +23,10 @@ test("has required properties", () => {
 // Test default property values
 test("timesHit property is 0 by default", () => {
     expect(ship.timesHit).toBe(0);
+});
+
+// OBJECT METHODS
+
+test("hit() method doesn't return any value", () => {
+    expect(ship.hit()).toBeUndefined();
 });
