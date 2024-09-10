@@ -27,6 +27,18 @@ test("timesHit property is 0 by default", () => {
 
 // OBJECT METHODS
 
+// hit()
 test("hit() method doesn't return any value", () => {
     expect(ship.hit()).toBeUndefined();
+});
+
+test("hit() method throws error if called more times than Ship object's length", () => {
+    expect(() => {
+        let testShip = new Ship(3);
+        let shipLength = ship.length;
+
+        for (let i = 0; i <= ship.length; i++) {
+            testShip.hit();
+        }
+    }).toThrow();
 });
