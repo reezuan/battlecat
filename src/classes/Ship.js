@@ -6,6 +6,10 @@ export class Ship {
     }
 
     hit() {
-        this.timesHit += 1;
+        if (this.timesHit < this.length) {
+            this.timesHit += 1;
+        } else {
+            throw new Error("Ship has been hit the maximum allowable number of times.");
+        }
     }
 }
