@@ -42,3 +42,34 @@ test("hit() method throws error if called more times than Ship object's length",
         }
     }).toThrow();
 });
+
+// isSunk()
+test("isSunk() returns something", () => {
+    let testShip = new Ship(4);
+
+    // Test that something is returned when timesHit !== length.
+    expect(testShip.isSunk()).toBeDefined();
+
+    // Test that something is returned when timesHit === length.
+    testShip.timesHit = testShip.length;
+    expect(testShip.isSunk()).toBeDefined();
+});
+
+test("isSunk() returns false if Ship's timesHit property does not equal its length", () => {
+    let testShip = new Ship(4);
+    
+    for (let i = 1; i < testShip.length; i++) {
+        testShip.hit();
+        expect(testShip.isSunk()).toBe(false);
+    }
+});
+
+test("isSunk() returns true if Ship's timesHit property equals its length", () => {
+    let testShip = new Ship(4);
+    
+    for (let i = 1; i <= testShip.length; i++) {
+        testShip.hit();
+    }
+
+    expect(testShip.isSunk()).toBe(true);
+});
