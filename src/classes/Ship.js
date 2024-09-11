@@ -12,4 +12,12 @@ export class Ship {
             throw new Error("Ship has been hit the maximum allowable number of times.");
         }
     }
+
+    /** 
+     * Calculates whether a ship is considered sunk based on its
+     * length and the number of hits it has received.
+     */
+    isSunk() {
+        return this.timesHit === this.length; 
+    }
 }
