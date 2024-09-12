@@ -21,6 +21,12 @@ test("has required properties", () => {
 });
 
 // Test default property values
+test("length property is correctly set", () => {
+    let testShip = new Ship(3);
+    
+    expect(testShip.length).toBe(3);
+});
+
 test("timesHit property is 0 by default", () => {
     expect(ship.timesHit).toBe(0);
 });
