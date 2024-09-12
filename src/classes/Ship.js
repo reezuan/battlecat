@@ -5,6 +5,11 @@ export class Ship {
         this.timesHit = 0;
     }
 
+    /**
+     * Increments the object's timesHit property by 1. Throws an error
+     * if called when object's timesHit property value is equal to its
+     * length property value.
+     */
     hit() {
         if (this.timesHit < this.length) {
             this.timesHit += 1;
