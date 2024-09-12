@@ -41,9 +41,9 @@ test("hit() method doesn't return any value", () => {
 test("hit() method throws error if called more times than Ship object's length", () => {
     expect(() => {
         let testShip = new Ship(3);
-        let shipLength = ship.length;
+        let shipLength = testShip.length;
 
-        for (let i = 0; i <= ship.length; i++) {
+        for (let i = 0; i <= shipLength; i++) {
             testShip.hit();
         }
     }).toThrow();
