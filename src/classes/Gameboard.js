@@ -24,6 +24,20 @@ export class Gameboard {
         
         return board;
     }
+
+    #isCoordinatesValid(coordinates) {
+        if (typeof coordinates !== "string") {
+            return false;
+        }
+        
+        const columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+        const rows = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+
+        let column = coordinates.substring(0, 1);
+        let row = coordinates.substring(1);
+
+        return columns.includes(column) && rows.includes(row);
+    }
 }
 
 // Properties
@@ -35,3 +49,4 @@ export class Gameboard {
 // - placeShip (Adds each ship as an element to this.placedShips)
 // - Return the object that is on a pair of coordinates
 // - Report whether all ships have been sunk
+// - Determine if a set of coordinates is valid
