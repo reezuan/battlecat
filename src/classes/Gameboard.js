@@ -1,9 +1,29 @@
 export class Gameboard {
-    #board;
-    #placedShips;
-
+    
     constructor() {
-        this.#board = this.#buildBoard();
+        this.board = this.#buildBoard();
+        this.placedShips = {
+            carrier: {
+                ship: null,
+                spaceRequired: 5,
+            },
+            battleship: {
+                ship: null,
+                spaceRequired: 4,
+            },
+            cruiser: {
+                ship: null,
+                spaceRequired: 3,
+            },
+            submarine: {
+                ship: null,
+                spaceRequired: 3,
+            },
+            destroyer: {
+                ship: null,
+                spaceRequired: 2,
+            }
+        };
     }
 
     /**
@@ -75,6 +95,21 @@ export class Gameboard {
                     return false;
                 }
             } else if (currentColumn !== previousColumn && currentRow !== previousRow) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if a Ship has already been placed on the board.
+     * @param {*} Ship A Ship object.
+     * @returns {boolean} True if the Ship has already been placed on the board, false otherwise.
+     */
+    #isShipPlaced(Ship) {
+        for (const ship in this.placedShips) {
+            if (this.placedShips[ship].ship === null && this.placedShips[ship].spaceRequired === Ship.length) {
                 return false;
             }
         }
