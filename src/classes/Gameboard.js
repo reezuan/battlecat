@@ -1,6 +1,8 @@
 export class Gameboard {
     
     constructor() {
+        this.columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+        this.rows = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
         this.board = this.#buildBoard();
         this.placedShips = {
             carrier: {
@@ -70,15 +72,13 @@ export class Gameboard {
      * @returns {object} An object representing a 10x10 game board.
      */
     #buildBoard() {
-        const columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
-        const rows = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
         let board = {};
 
-        for (let i = 0; i < columns.length; i++) {
-            for (let j = 0; j < rows.length; j++) {
-                board[`${columns[i]}${rows[j]}`] = {
-                    row: rows[j],
-                    column: columns[i],
+        for (let i = 0; i < this.columns.length; i++) {
+            for (let j = 0; j < this.rows.length; j++) {
+                board[`${this.columns[i]}${this.rows[j]}`] = {
+                    row: this.rows[j],
+                    column: this.columns[i],
                     isHit: false,
                     occupiedBy: null
                 }
@@ -92,14 +92,11 @@ export class Gameboard {
         if (typeof coordinates !== "string") {
             return false;
         }
-        
-        const columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
-        const rows = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
         let column = coordinates.substring(0, 1);
         let row = coordinates.substring(1);
 
-        return columns.includes(column) && rows.includes(row);
+        return this.columns.includes(column) && this.rows.includes(row);
     }
 
     /**
@@ -108,9 +105,6 @@ export class Gameboard {
      * @returns {boolean} True if the coordinates are contiguous, false otherwise.
      */
     #isCoordinatesContiguous(coordinates) {
-        const columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
-        const rows = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
-        
         // Start for-loop from the second set of coordinates.
         for (let i = 1; i < coordinates.length; i++) {
             let currentColumn = coordinates[i].substring(0, 1);
@@ -126,11 +120,11 @@ export class Gameboard {
             // Once we determine which of the two is the same, we can
             // then check for the other.
             if (currentColumn === previousColumn) {
-                if (rows.indexOf(currentRow) - rows.indexOf(previousRow) !== 1) {
+                if (this.rows.indexOf(currentRow) - this.rows.indexOf(previousRow) !== 1) {
                     return false;
                 }
             } else if (currentRow === previousRow) {
-                if (columns.indexOf(currentColumn) - columns.indexOf(previousColumn) !== 1) {
+                if (this.columns.indexOf(currentColumn) - this.columns.indexOf(previousColumn) !== 1) {
                     return false;
                 }
             } else if (currentColumn !== previousColumn && currentRow !== previousRow) {
