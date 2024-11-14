@@ -27,6 +27,45 @@ export class Gameboard {
     }
 
     /**
+     * Place a Ship object at specified coordinates on the board.
+     * @param {*} Ship A Ship object.
+     * @param {Array<string>} coordinates An array of game board coordinates on which the Ship is to be placed.
+     */
+    placeShip(Ship, coordinates) {
+        // First, check if all the provided coordinates are valid. If at
+        // least one isn't valid, throw an error.
+        for (let i = 0; i < coordinates.length; i++) {
+            if (!this.#isCoordinatesValid(coordinates[i])) {
+                throw new Error("One or more coordinates are invalid.");
+            }
+        }
+
+        // Then, check if the coordinates are contiguous. If they aren't,
+        // throw an error.
+        if (!this.#isCoordinatesContiguous(coordinates)) {
+            throw new Error("Coordinates are not contiguous.");
+        }
+
+        // Next, check if the Ship has already been placed on the board.
+        // If it has, throw an error.
+        if (this.#isShipPlaced(Ship)) {
+            throw new Error("Ship has already been placed on the board.");
+        }
+
+        // Finally, if all the above checks pass, place the Ship on the board.
+        for (const ship in this.placedShips) {
+            if (this.placedShips[ship].ship === null && this.placedShips[ship].spaceRequired === Ship.length) {
+                this.placedShips[ship].ship = Ship;
+                break;
+            }
+        }
+        
+        coordinates.forEach(coords => {
+            this.board[coords]["occupiedBy"] = Ship;
+        });
+    }
+
+    /**
      * Builds a virtual 10x10 game board.
      * @returns {object} An object representing a 10x10 game board.
      */
@@ -117,10 +156,6 @@ export class Gameboard {
         return true;
     }
 }
-
-// Properties
-// - #board (object)
-// - #placedShips (array)
 
 // Methods
 // - receiveAttack (Takes a pair of coordinates, determines if the attack hit a ship, sends hit function to correct ship or record coordinates)
