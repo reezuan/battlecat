@@ -1,7 +1,7 @@
 import { Gameboard } from "../../src/classes/Gameboard.js";
 import { Ship } from "../../src/classes/Ship.js";
 
-// OBJECT CONSTRUCTOR
+// -------------------- OBJECT CONSTRUCTOR --------------------
 
 let gameboard = new Gameboard();
 
@@ -13,9 +13,9 @@ test("creates a Gameboard object", () => {
     expect(gameboard).toBeInstanceOf(Gameboard);
 });
 
-// OBJECT PROPERTIES
+// -------------------- OBJECT PROPERTIES --------------------
 
-// Gameboard.board
+// ----- Gameboard.board -----
 
 test("'board' property is defined", () => {
     expect(gameboard.board).toBeDefined();
@@ -37,7 +37,7 @@ test("each value in 'board' object has required properties and correct pre-defin
     }
 });
 
-// Gameboard.placedShips
+// ----- Gameboard.placedShips -----
 
 test("Gameboard.placedShips is defined", () => {
     expect(gameboard.placedShips).toBeDefined();
@@ -102,4 +102,141 @@ test("Gameboard.placedShips.spaceRequired must match the length of the Ship obje
     for (const ship in gameboard.placedShips) {
         expect(gameboard.placedShips[ship].spaceRequired).toBe(gameboard.placedShips[ship].ship.length);
     }
+});
+
+// ----- Gameboard.placeShip -----
+
+test("throws if at least one of the coordinates is not a valid set of coordinates", () => {
+    expect(() => {
+        const gameboard = new Gameboard();
+        const carrier = new Ship(5);
+
+        gameboard.placeShip(carrier, ["A1", "A2", "cat", "A4", "A5"]);
+    }).toThrow("One or more coordinates are invalid.");
+});
+
+test("throws if at least one of the coordinates' row/column is outside the board's range", () => {
+    expect(() => {
+        const gameboard = new Gameboard();
+        const carrier = new Ship(5);
+
+        gameboard.placeShip(carrier, ["A7", "A8", "A9", "A10", "A11"]);
+    }).toThrow("One or more coordinates are invalid.");
+
+    expect(() => {
+        const gameboard = new Gameboard();
+        const carrier = new Ship(5);
+
+        gameboard.placeShip(carrier, ["I7", "J7", "K7", "L7", "M7"]);
+    }).toThrow("One or more coordinates are invalid.");
+});
+
+test("throws if the coordinates are not contiguous", () => {
+    expect(() => {
+        const gameboard = new Gameboard();
+        const carrier = new Ship(5);
+
+        gameboard.placeShip(carrier, ["A1", "A2", "A3", "A4", "A6"]);
+    }).toThrow("Coordinates are not contiguous.");
+});
+
+test("throws when placing more than one instance of Ship with length 5, 4, or 2 on the board", () => {
+    expect(() => {
+        const gameboard = new Gameboard();
+        const carrier = new Ship(5);
+        const secondCarrier = new Ship(5);
+
+        gameboard.placeShip(carrier, ["A1", "A2", "A3", "A4", "A5"]);
+        gameboard.placeShip(secondCarrier, ["B1", "B2", "B3", "B4", "B5"]);
+    }).toThrow("Ship has already been placed on the board.");
+
+    expect(() => {
+        const gameboard = new Gameboard();
+        const battleship = new Ship(4);
+        const secondBattleship = new Ship(4);
+
+        gameboard.placeShip(battleship, ["A1", "A2", "A3", "A4"]);
+        gameboard.placeShip(secondBattleship, ["B1", "B2", "B3", "B4"]);
+    }).toThrow("Ship has already been placed on the board.");
+
+    expect(() => {
+        const gameboard = new Gameboard();
+        const destroyer = new Ship(2);
+        const secondDestroyer = new Ship(2);
+
+        gameboard.placeShip(destroyer, ["A1", "A2"]);
+        gameboard.placeShip(secondDestroyer, ["B1", "B2"]);
+    }).toThrow("Ship has already been placed on the board.");
+});
+
+test("doesn't throw if two ships of length 3 are placed on the board", () => {
+    expect(() => {
+        const gameboard = new Gameboard();
+        const cruiser = new Ship(3);
+        const submarine = new Ship(3);
+
+        gameboard.placeShip(cruiser, ["A1", "A2", "A3"]);
+        gameboard.placeShip(submarine, ["B1", "B2", "B3"]);
+    }).not.toThrow();
+});
+
+
+test("when ship is placed, the correct 'ship' property is updated", () => {
+    const gameboard = new Gameboard();
+    
+    const carrier = new Ship(5);
+    const battleship = new Ship(4);
+    const cruiser = new Ship(3);
+    const submarine = new Ship(3);
+    const destroyer = new Ship(2);
+
+    gameboard.placeShip(carrier, ["A1", "A2", "A3", "A4", "A5"]);
+    gameboard.placeShip(battleship, ["B1", "B2", "B3", "B4"]);
+    gameboard.placeShip(cruiser, ["C1", "C2", "C3"]);
+    gameboard.placeShip(submarine, ["D1", "D2", "D3"]);
+    gameboard.placeShip(destroyer, ["E1", "E2"]);
+
+    expect(gameboard.placedShips.carrier.ship).toBe(carrier);
+    expect(gameboard.placedShips.battleship.ship).toBe(battleship);
+    expect(gameboard.placedShips.cruiser.ship).toBe(cruiser);
+    expect(gameboard.placedShips.submarine.ship).toBe(submarine);
+    expect(gameboard.placedShips.destroyer.ship).toBe(destroyer);
+});
+
+test("correct properties in 'board' property are updated when ship is placed", () => {
+    const gameboard = new Gameboard();
+
+    const carrier = new Ship(5);
+    const battleship = new Ship(4);
+    const cruiser = new Ship(3);
+    const submarine = new Ship(3);
+    const destroyer = new Ship(2);
+
+    gameboard.placeShip(carrier, ["A1", "A2", "A3", "A4", "A5"]);
+    gameboard.placeShip(battleship, ["B1", "B2", "B3", "B4"]);
+    gameboard.placeShip(cruiser, ["C1", "C2", "C3"]);
+    gameboard.placeShip(submarine, ["D1", "D2", "D3"]);
+    gameboard.placeShip(destroyer, ["E1", "E2"]);
+
+    expect(gameboard.board["A1"].occupiedBy).toBe(carrier);
+    expect(gameboard.board["A2"].occupiedBy).toBe(carrier);
+    expect(gameboard.board["A3"].occupiedBy).toBe(carrier);
+    expect(gameboard.board["A4"].occupiedBy).toBe(carrier);
+    expect(gameboard.board["A5"].occupiedBy).toBe(carrier);
+
+    expect(gameboard.board["B1"].occupiedBy).toBe(battleship);
+    expect(gameboard.board["B2"].occupiedBy).toBe(battleship);
+    expect(gameboard.board["B3"].occupiedBy).toBe(battleship);
+    expect(gameboard.board["B4"].occupiedBy).toBe(battleship);
+
+    expect(gameboard.board["C1"].occupiedBy).toBe(cruiser);
+    expect(gameboard.board["C2"].occupiedBy).toBe(cruiser);
+    expect(gameboard.board["C3"].occupiedBy).toBe(cruiser);
+
+    expect(gameboard.board["D1"].occupiedBy).toBe(submarine);
+    expect(gameboard.board["D2"].occupiedBy).toBe(submarine);
+    expect(gameboard.board["D3"].occupiedBy).toBe(submarine);
+
+    expect(gameboard.board["E1"].occupiedBy).toBe(destroyer);
+    expect(gameboard.board["E2"].occupiedBy).toBe(destroyer);
 });
