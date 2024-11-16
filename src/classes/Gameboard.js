@@ -68,6 +68,30 @@ export class Gameboard {
     }
 
     /**
+     * Receives an attack on the gameboard at a given set of coordinates.
+     * @param {string} coordinates A set of coordinates on the gameboard.
+     */
+    receiveAttack(coordinates) {
+        // First, check if the provided coordinates are valid and if the
+        // cell has already been hit.
+        if (!this.#isCoordinatesValid(coordinates)) {
+            throw new Error("The provided coordinates are invalid.");
+        } else if (this.board[coordinates].isHit) {
+            throw new Error("The provided coordinates have already been attacked.");
+        }
+
+        // If valid and not already hit, change the 'isHit' property of
+        // that gameboard cell to 'true'.
+        this.board[coordinates].isHit = true;
+
+        // Then, check if the cell is occupied by a ship. If it is, call
+        // the ship's hit method.
+        if (this.board[coordinates].occupiedBy !== null) {
+            this.board[coordinates].occupiedBy.hit();
+        }
+    }
+
+    /**
      * Builds a virtual 10x10 game board.
      * @returns {object} An object representing a 10x10 game board.
      */
@@ -150,10 +174,3 @@ export class Gameboard {
         return true;
     }
 }
-
-// Methods
-// - receiveAttack (Takes a pair of coordinates, determines if the attack hit a ship, sends hit function to correct ship or record coordinates)
-// - placeShip (Adds each ship as an element to this.placedShips)
-// - Return the object that is on a pair of coordinates
-// - Report whether all ships have been sunk
-// - Determine if a set of coordinates is valid
