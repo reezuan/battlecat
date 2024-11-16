@@ -326,3 +326,73 @@ test("hit method is called on the correct ship if a ship occupies the cell", () 
     expect(carrierSpy).toHaveBeenCalled();
     expect(battleshipSpy).not.toHaveBeenCalled();
 });
+
+// ----- Gameboard.areAllShipsSunk -----
+
+test("method is called on each ship object in Gameboard.placedShips", () => {
+    const gameboard = new Gameboard();
+
+    const carrier = new Ship(5);
+    const battleship = new Ship(4);
+    const cruiser = new Ship(3);
+    const submarine = new Ship(3);
+    const destroyer = new Ship(2);
+
+    const spy = jest.spyOn(gameboard, "areAllShipsSunk");
+
+    gameboard.placeShip(carrier, ["A1", "A2", "A3", "A4", "A5"]);
+    gameboard.placeShip(battleship, ["B1", "B2", "B3", "B4"]);
+    gameboard.placeShip(cruiser, ["C1", "C2", "C3"]);
+    gameboard.placeShip(submarine, ["D1", "D2", "D3"]);
+    gameboard.placeShip(destroyer, ["E1", "E2"]);
+
+    gameboard.areAllShipsSunk();
+
+    expect(spy).toHaveBeenCalled();
+});
+
+describe("returns true if all ships are sunk, false otherwise", () => {
+    const gameboard = new Gameboard();
+
+    const carrier = new Ship(5);
+    const battleship = new Ship(4);
+    const cruiser = new Ship(3);
+    const submarine = new Ship(3);
+    const destroyer = new Ship(2);
+
+    gameboard.placeShip(carrier, ["A1", "A2", "A3", "A4", "A5"]);
+    gameboard.placeShip(battleship, ["B1", "B2", "B3", "B4"]);
+    gameboard.placeShip(cruiser, ["C1", "C2", "C3"]);
+    gameboard.placeShip(submarine, ["D1", "D2", "D3"]);
+    gameboard.placeShip(destroyer, ["E1", "E2"]);
+    
+    test("returns false if at least one ship is not sunk", () => {
+        gameboard.receiveAttack("A1");
+        gameboard.receiveAttack("A2");
+        gameboard.receiveAttack("A3");
+        gameboard.receiveAttack("A4");
+        gameboard.receiveAttack("A5");
+
+        gameboard.receiveAttack("B1");
+        gameboard.receiveAttack("B2");
+        gameboard.receiveAttack("B3");
+        gameboard.receiveAttack("B4");
+
+        gameboard.receiveAttack("C1");
+        gameboard.receiveAttack("C2");
+        gameboard.receiveAttack("C3");
+
+        gameboard.receiveAttack("D1");
+        gameboard.receiveAttack("D2");
+        gameboard.receiveAttack("D3");
+
+        expect(gameboard.areAllShipsSunk()).toBe(false);
+    });
+    
+    test("returns true if all ships are sunk", () => {
+        gameboard.receiveAttack("E1");
+        gameboard.receiveAttack("E2");
+
+        expect(gameboard.areAllShipsSunk()).toBe(true);
+    }); 
+});
