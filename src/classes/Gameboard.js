@@ -92,6 +92,20 @@ export class Gameboard {
     }
 
     /**
+     * Checks if all the ships on the gameboard have been sunk.
+     * @returns {boolean} True if all ships have been sunk, false otherwise.
+     */
+    areAllShipsSunk() {
+        for (const ship in this.placedShips) {
+            if (this.placedShips[ship].ship.isSunk() === false) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Builds a virtual 10x10 game board.
      * @returns {object} An object representing a 10x10 game board.
      */
