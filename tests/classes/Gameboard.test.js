@@ -275,3 +275,54 @@ test("correct properties in 'board' property are updated when ship is placed", (
     expect(gameboard.board["E1"].occupiedBy).toBe(destroyer);
     expect(gameboard.board["E2"].occupiedBy).toBe(destroyer);
 });
+
+// ----- Gameboard.receiveAttack -----
+
+test("throws if coordinates are invalid", () => {
+    expect(() => {
+        const gameboard = new Gameboard();
+        const carrier = new Ship(5);
+
+        gameboard.placeShip(carrier, ["A1", "A2", "A3", "A4", "A5"]);
+        
+        gameboard.receiveAttack("cat");
+    }).toThrow("The provided coordinates are invalid.");
+});
+
+test("throws if coordinates have already been attacked", () => {
+    expect(() => {
+        const gameboard = new Gameboard();
+        const carrier = new Ship(5);
+
+        gameboard.placeShip(carrier, ["A1", "A2", "A3", "A4", "A5"]);
+
+        gameboard.receiveAttack("A1");
+        gameboard.receiveAttack("A1");
+    }).toThrow("The provided coordinates have already been attacked.");
+});
+
+test("updates 'isHit' property of the correct cell to 'true'", () => {
+    const gameboard = new Gameboard();
+    const carrier = new Ship(5);
+
+    gameboard.placeShip(carrier, ["A1", "A2", "A3", "A4", "A5"]);
+    gameboard.receiveAttack("A1");
+
+    expect(gameboard.board["A1"].isHit).toBe(true);
+});
+
+test("hit method is called on the correct ship if a ship occupies the cell", () => {
+    const gameboard = new Gameboard();
+    const carrier = new Ship(5);
+    const battleship = new Ship(4);
+    
+    const carrierSpy = jest.spyOn(carrier, "hit");
+    const battleshipSpy = jest.spyOn(battleship, "hit");
+
+    gameboard.placeShip(carrier, ["A1", "A2", "A3", "A4", "A5"]);
+    gameboard.placeShip(battleship, ["B1", "B2", "B3", "B4"]);
+    gameboard.receiveAttack("A1");
+
+    expect(carrierSpy).toHaveBeenCalled();
+    expect(battleshipSpy).not.toHaveBeenCalled();
+});
