@@ -1,4 +1,5 @@
 import { Player } from "../../src/classes/Player.js";
+import { Gameboard } from "../../src/classes/Gameboard.js";
 
 // -------------------- OBJECT CONSTRUCTOR --------------------
 
@@ -53,4 +54,21 @@ describe("Player.isComputerControlled property has the correct value", () => {
         const player = new Player("Player 1", true);
         expect(player.isComputerControlled).toBe(true);
     });
+});
+
+// ----- Player.gameboard -----
+
+test("Player.gameboard property is defined", () => {
+    const player = new Player("Player 1", false);
+    expect(player.gameboard).toBeDefined();
+});
+
+test("Player.gameboard property is an instance of Gameboard", () => {
+    const player = new Player("Player 1", false);
+    expect(player.gameboard).toBeInstanceOf(Gameboard);
+});
+
+test("Player.gameboard property has the correct default value", () => {
+    const player = new Player("Player 1", false);
+    expect(player.gameboard).toEqual(new Gameboard());
 });
