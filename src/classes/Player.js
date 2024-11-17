@@ -1,3 +1,5 @@
+import { Gameboard } from "./Gameboard.js";
+
 export class Player {
     
     /**
@@ -7,5 +9,6 @@ export class Player {
     constructor(name, isComputerControlled) {
         this.name = name;
         this.isComputerControlled = isComputerControlled;
+        this.gameboard = new Gameboard();
     }
 }
