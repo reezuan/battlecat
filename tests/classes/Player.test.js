@@ -30,3 +30,27 @@ test("Player.name property has the correct value", () => {
     const player = new Player("Player 1", false);
     expect(player.name).toBe("Player 1");
 });
+
+// ----- Player.isComputerControlled -----
+
+test("Player.isComputerControlled property is defined", () => {
+    const player = new Player("Player 1", false);
+    expect(player.isComputerControlled).toBeDefined();
+});
+
+test("Player.isComputerControlled property is a boolean", () => {
+    const player = new Player("Player 1", false);
+    expect(typeof player.isComputerControlled).toBe("boolean");
+});
+
+describe("Player.isComputerControlled property has the correct value", () => {
+    test("false", () => {
+        const player = new Player("Player 1", false);
+        expect(player.isComputerControlled).toBe(false);
+    });
+
+    test("true", () => {
+        const player = new Player("Player 1", true);
+        expect(player.isComputerControlled).toBe(true);
+    });
+});
