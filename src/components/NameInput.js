@@ -12,7 +12,6 @@ export function NameInput() {
     
     input.setAttribute("type", "text");
     input.setAttribute("required", "");
-    input.setAttribute("id", "player-name");
     input.setAttribute("minlength", "1");
     input.setAttribute("maxlength", "20");
 
