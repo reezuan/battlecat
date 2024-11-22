@@ -18,6 +18,7 @@ export function NameInputContainer(isPlayerOne) {
     namePrompt.textContent = `Enter Player ${ isPlayerOne ? "1" : "2" } name:`;
     
     const playerNameInput = NameInput();
+    playerNameInput.querySelector("input").disabled = isPlayerOne ? false : true;
     
     container.appendChild(playerImage);
     container.appendChild(namePrompt);
